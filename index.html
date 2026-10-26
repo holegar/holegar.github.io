@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sam Holegar, data engineer in Geelong</title>
+<meta name="description" content="Sam Holegar is a data engineer in Geelong, Victoria. Data migration, change data capture, Microsoft Fabric, AWS and agentic AI.">
+<meta property="og:title" content="Sam Holegar, data engineer in Geelong">
+<meta property="og:description" content="I move data from where it lives to where people need it, and prove it's still right when it arrives.">
+<meta property="og:type" content="website">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F2F5F3;
+    --ink: #16343F;
+    --muted: #4E6A70;
+    --line: #C3D2CE;
+    --wheat: #A97A22;
+    --tint: #E4ECE9;
+    --display: "Bricolage Grotesque", "Avenir Next Condensed", "Arial Narrow", system-ui, sans-serif;
+    --text: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --paper: #0F2229;
+      --ink: #E4ECE8;
+      --muted: #9DB3B2;
+      --line: #2B4852;
+      --wheat: #D9B45E;
+      --tint: #15303A;
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--text);
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+  a { color: inherit; text-decoration-color: var(--wheat); text-decoration-thickness: 2px; text-underline-offset: 4px; }
+  a:hover { text-decoration-thickness: 3px; }
+  :focus-visible { outline: 3px solid var(--wheat); outline-offset: 3px; border-radius: 2px; }
+
+  .skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--paper); padding: .5rem 1rem; }
+  .skip:focus { left: 1rem; top: 1rem; z-index: 10; }
+
+  .wrap { max-width: 68rem; margin: 0 auto; padding: 0 1.5rem; }
+  .measure { max-width: 40rem; }
+
+  /* Hero */
+  header.hero { padding: 5.5rem 0 4rem; }
+  h1 {
+    font-family: var(--display);
+    font-variation-settings: "wdth" 82, "opsz" 96;
+    font-weight: 750;
+    font-size: clamp(3rem, 9vw, 6.25rem);
+    line-height: .92;
+    letter-spacing: -.025em;
+    margin: 0 0 1.75rem;
+  }
+  .thesis { font-size: clamp(1.25rem, 2.4vw, 1.6rem); line-height: 1.4; margin: 0 0 2.5rem; max-width: 34rem; }
+
+  /* The signature line: where data lives, to where people need it, checked */
+  .journey { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; margin: 0 0 2.75rem; color: var(--muted); font-size: 1rem; }
+  .journey .track { position: relative; height: 2px; background: var(--ink); }
+  .journey .track::before, .journey .track::after { content: ""; position: absolute; top: -5px; width: 12px; height: 12px; border-radius: 50%; }
+  .journey .track::before { left: -2px; background: var(--paper); border: 2px solid var(--ink); }
+  .journey .track::after { right: -2px; background: var(--ink); }
+  .journey .end { display: inline-flex; align-items: center; gap: .5rem; color: var(--ink); font-weight: 700; }
+  .check { width: 1.15em; height: 1.15em; flex: none; color: var(--wheat); }
+
+  .who { margin: 0 0 1.25rem; color: var(--muted); }
+  .links { display: flex; flex-wrap: wrap; gap: .75rem 1.75rem; margin: 0; padding: 0; list-style: none; font-weight: 700; }
+
+  /* Sections */
+  section { padding: 3.5rem 0; border-top: 1px solid var(--line); }
+  h2 {
+    font-family: var(--display);
+    font-variation-settings: "wdth" 90, "opsz" 48;
+    font-weight: 650;
+    font-size: 1.75rem;
+    line-height: 1.15;
+    letter-spacing: -.01em;
+    margin: 0 0 .5rem;
+  }
+  .lede { color: var(--muted); margin: 0 0 2.5rem; }
+  h3 { font-family: var(--display); font-variation-settings: "wdth" 95, "opsz" 24; font-weight: 650; font-size: 1.3rem; margin: 0 0 1rem; line-height: 1.25; }
+
+  /* Work as reconciliations */
+  .moves { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem; }
+  .move .flow { display: grid; grid-template-columns: 1fr 4.5rem 1fr; align-items: stretch; gap: .75rem; }
+  .side { background: var(--tint); padding: .9rem 1rem; border-radius: 6px; }
+  .side small { display: block; color: var(--muted); font-size: .85rem; margin-bottom: .2rem; }
+  .side p { margin: 0; line-height: 1.45; }
+  .arrow { align-self: center; color: var(--ink); }
+  .arrow svg { display: block; width: 100%; height: 14px; }
+  .arrow .v { display: none; }
+  .how { margin: .9rem 0 .4rem; color: var(--muted); font-size: 1rem; }
+  .proof { display: flex; gap: .5rem; align-items: flex-start; margin: 0; font-weight: 700; }
+
+  /* AI */
+  .ai p { margin: 0 0 1.1rem; }
+
+  /* Timeline (a real sequence) */
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline li { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid var(--line); }
+  .timeline li:last-child { border-bottom: 0; }
+  .timeline .when { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .timeline .role { font-weight: 700; }
+  .timeline .where { display: block; font-weight: 400; color: var(--muted); }
+
+  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 3rem; }
+  .plain { margin: 0; padding: 0; list-style: none; }
+  .plain li { margin: 0 0 .7rem; }
+  .plain li span { display: block; color: var(--muted); font-size: 1rem; }
+  .stack dt { font-weight: 700; margin-top: 1rem; }
+  .stack dt:first-child { margin-top: 0; }
+  .stack dd { margin: .15rem 0 0; color: var(--muted); }
+
+  .building li { margin-bottom: 1rem; }
+  .status { display: inline-block; font-size: .85rem; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 .6rem; margin-left: .35rem; }
+
+  footer { border-top: 1px solid var(--line); padding: 3rem 0 4rem; }
+  footer p { margin: 0 0 .75rem; }
+
+  @media (max-width: 720px) {
+    body { font-size: 1.0625rem; }
+    header.hero { padding: 3.5rem 0 3rem; }
+    .journey { grid-template-columns: 1fr; gap: .6rem; }
+    .journey .track { height: 2px; width: 100%; }
+    .move .flow { grid-template-columns: 1fr; }
+    .arrow { justify-self: start; width: 14px; height: 2.25rem; }
+    .arrow svg { width: 14px; height: 100%; transform: none; }
+    .arrow .h { display: none; }
+    .arrow .v { display: block; }
+    .timeline li { grid-template-columns: 1fr; gap: .1rem; }
+    .cols { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#work">Skip to my work</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="tick" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 10.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Sam<br>Holegar</h1>
+    <p class="thesis">I move data from where it lives to where people need it, and prove it's still right when it arrives.</p>
+
+    <div class="journey" aria-hidden="true">
+      <span>Where data lives</span>
+      <span class="track"></span>
+      <span class="end">Where people need it <svg class="check"><use href="#tick"/></svg></span>
+    </div>
+
+    <p class="who">Senior Data Engineer at KnetMiner, with 18 years in data. Based in Geelong, Victoria.</p>
+    <ul class="links">
+      <li><a href="https://www.linkedin.com/in/holegar">LinkedIn</a></li>
+      <li><a href="https://github.com/holegar">GitHub</a></li>
+      <li><a href="mailto:hesam.holegar@gmail.com">hesam.holegar@gmail.com</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+  <section id="work">
+    <div class="wrap">
+      <h2>Data I've moved, and how I proved it</h2>
+      <p class="lede measure">Each of these took data from one place to another. The part that matters is the last line.</p>
+
+      <ol class="moves">
+        <li class="move">
+          <h3>A group of more than 100 companies, consolidated</h3>
+          <div class="flow">
+            <div class="side"><small>From</small><p>Financial data in each company's own systems, which kept running</p></div>
+            <div class="arrow" aria-hidden="true"><svg class="h" viewBox="0 0 72 14" preserveAspectRatio="none"><path d="M0 7h64" stroke="currentColor" stroke-width="2"/><path d="M60 2l8 5-8 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg class="v" viewBox="0 0 14 36" preserveAspectRatio="none"><path d="M7 0v28" stroke="currentColor" stroke-width="2"/><path d="M2 24l5 8 5-8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+            <div class="side"><small>To</small><p>One central warehouse and consolidation engine</p></div>
+          </div>
+          <p class="how">SQL Server change data capture and agents over linked servers kept both sides in sync on an ongoing basis.</p>
+          <p class="proof"><svg class="check"><use href="#tick"/></svg><span>Reconciliation checks before any figure reached the engine. Data-gathering time fell by 70%.</span></p>
+        </li>
+
+        <li class="move">
+          <h3>Insurance data integration</h3>
+          <div class="flow">
+            <div class="side"><small>From</small><p>Separate systems at three insurers, including Iran's largest</p></div>
+            <div class="arrow" aria-hidden="true"><svg class="h" viewBox="0 0 72 14" preserveAspectRatio="none"><path d="M0 7h64" stroke="currentColor" stroke-width="2"/><path d="M60 2l8 5-8 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg class="v" viewBox="0 0 14 36" preserveAspectRatio="none"><path d="M7 0v28" stroke="currentColor" stroke-width="2"/><path d="M2 24l5 8 5-8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+            <div class="side"><small>To</small><p>Integrated, consolidated data each business could rely on</p></div>
+          </div>
+          <p class="how">Built on SQL Server with change data capture. I managed the projects and worked hands-on where they needed it.</p>
+          <p class="proof"><svg class="check"><use href="#tick"/></svg><span>Delivered in a regulated industry, where figures that don't reconcile aren't a small problem.</span></p>
+        </li>
+
+        <li class="move">
+          <h3>Wheat genomics, migrated to new gene models</h3>
+          <div class="flow">
+            <div class="side"><small>From</small><p>RefSeq v1.1 gene models</p></div>
+            <div class="arrow" aria-hidden="true"><svg class="h" viewBox="0 0 72 14" preserveAspectRatio="none"><path d="M0 7h64" stroke="currentColor" stroke-width="2"/><path d="M60 2l8 5-8 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg class="v" viewBox="0 0 14 36" preserveAspectRatio="none"><path d="M7 0v28" stroke="currentColor" stroke-width="2"/><path d="M2 24l5 8 5-8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+            <div class="side"><small>To</small><p>RefSeq v2.1 gene models</p></div>
+          </div>
+          <p class="how">Python identifier mapping between versions, plus a bridge between wheat and Arabidopsis homologs using OMA orthologous groups.</p>
+          <p class="proof"><svg class="check"><use href="#tick"/></svg><span>Validated against an approved reference output before anyone relied on it.</span></p>
+        </li>
+
+        <li class="move">
+          <h3>The KnetMiner knowledge graph</h3>
+          <div class="flow">
+            <div class="side"><small>From</small><p>More than ten separate biological data sources</p></div>
+            <div class="arrow" aria-hidden="true"><svg class="h" viewBox="0 0 72 14" preserveAspectRatio="none"><path d="M0 7h64" stroke="currentColor" stroke-width="2"/><path d="M60 2l8 5-8 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg class="v" viewBox="0 0 14 36" preserveAspectRatio="none"><path d="M7 0v28" stroke="currentColor" stroke-width="2"/><path d="M2 24l5 8 5-8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+            <div class="side"><small>To</small><p>One Neo4j and RDF graph of millions of nodes</p></div>
+          </div>
+          <p class="how">ETL pipelines on AWS mapped each source to a shared, ontology-based domain model.</p>
+          <p class="proof"><svg class="check"><use href="#tick"/></svg><span>Used by crop researchers for gene discovery.</span></p>
+        </li>
+
+        <li class="move">
+          <h3>Executive reporting at Rothamsted Research</h3>
+          <div class="flow">
+            <div class="side"><small>From</small><p>Manual collection of finance, HR, legal and funding data</p></div>
+            <div class="arrow" aria-hidden="true"><svg class="h" viewBox="0 0 72 14" preserveAspectRatio="none"><path d="M0 7h64" stroke="currentColor" stroke-width="2"/><path d="M60 2l8 5-8 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg class="v" viewBox="0 0 14 36" preserveAspectRatio="none"><path d="M7 0v28" stroke="currentColor" stroke-width="2"/><path d="M2 24l5 8 5-8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+            <div class="side"><small>To</small><p>Automated reporting on Microsoft Fabric</p></div>
+          </div>
+          <p class="how">Python, SQL and Data Factory pipelines into Power BI semantic models, with KPI definitions agreed across departments.</p>
+          <p class="proof"><svg class="check"><use href="#tick"/></svg><span>One analysis linked media coverage to funding. The investment that followed helped lift funds secured by 66%.</span></p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="ai">
+    <div class="wrap measure">
+      <h2>How I use AI</h2>
+      <p>I use AI coding agents every day, but I don't trust any single one. Claude Code and Gemini Antigravity check each other's work on our HPC cluster, and when they disagree, that's usually where I need to look.</p>
+      <p>I also built an agent that runs and verifies our data pipeline. Nothing it produces gets merged until I've reviewed it.</p>
+      <p>At KnetMiner I work on an agentic tool built on a locally hosted Llama model. It answers researchers' questions by searching the knowledge graphs they've already built, and it can start from a biological concept and build a new graph around it.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Where I've worked</h2>
+      <ol class="timeline measure" style="margin-top:1.5rem">
+        <li><span class="when">2025 – now</span><span class="role">Senior Data Engineer<span class="where">KnetMiner, remote</span></span></li>
+        <li><span class="when">2024 – 2025</span><span class="role">Data Engineer<span class="where">Rothamsted Research, UK</span></span></li>
+        <li><span class="when">2023 – 2024</span><span class="role">Business Intelligence Lead<span class="where">Rothamsted Research, UK</span></span></li>
+        <li><span class="when">2020 – 2022</span><span class="role">Business Intelligence Team Lead<span class="where">System Group. Led a team of seven across 50+ projects, with clients including insurers, the Iranian judiciary and an arts centre.</span></span></li>
+        <li><span class="when">2015 – 2020</span><span class="role">Business Intelligence Developer<span class="where">System Group</span></span></li>
+        <li><span class="when">2005 – 2015</span><span class="role">Business Analyst<span class="where">Peymaneh Civil Co. Implemented an ISO 9001 quality system.</span></span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap cols">
+      <div>
+        <h2>Tools I use most</h2>
+        <dl class="stack">
+          <dt>Platforms</dt>
+          <dd>Microsoft Fabric, Power BI, SQL Server (SSIS, SSAS, SSRS), AWS (S3, EC2, Lambda, IAM), Neo4j and RDF</dd>
+          <dt>Engineering</dt>
+          <dd>Python, SQL, Snakemake on SLURM HPC clusters, change data capture, Git and GitHub Actions</dd>
+          <dt>AI</dt>
+          <dd>Claude Code, Gemini Antigravity, a locally hosted Llama model, MCP servers and LLM evaluation</dd>
+        </dl>
+      </div>
+      <div>
+        <h2>Recognition and writing</h2>
+        <ul class="plain">
+          <li>UK Global Talent, Exceptional Talent in Digital Technology<span>Endorsed by UKRI, 2024</span></li>
+          <li><a href="https://zenodo.org/records/21065072">KnetMiner, AI-Assisted Gene Discovery Platform</a><span>Co-author, E-PAN/ELIXIR Workshop, 2026</span></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Education</h2>
+        <ul class="plain">
+          <li>MSc Big Data Analytics<span>Sheffield Hallam University, 2024. Dissertation benchmarking GPT-4 and Mistral against fine-tuned models.</span></li>
+          <li>Master of Information Technology Management<span>University of Tehran, 2017</span></li>
+          <li>Bachelor of Computer Science<span>University of Tabriz, 2008</span></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Certifications</h2>
+        <ul class="plain">
+          <li>Neo4j Fundamentals, Graph Data Modeling, Cypher and Importing Data<span>2024</span></li>
+          <li>GDPR certification<span>2024</span></li>
+          <li>ITIL Foundation<span>2017</span></li>
+          <li>Data Science Specialization, Johns Hopkins<span>2014</span></li>
+          <li>ISO 9001 Auditor, TUV InterCERT<span>2008</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap measure">
+      <h2>Public projects I'm building</h2>
+      <p class="lede">Built from scratch with public data, so anyone can run them.</p>
+      <ul class="plain building">
+        <li>Change data capture coexistence demo <span class="status">In progress</span><span>SQL Server CDC feeding a lakehouse, with a reconciliation report proving both sides match.</span></li>
+        <li>Fabric medallion lakehouse <span class="status">In progress</span><span>Data Factory pipelines into a Power BI semantic model.</span></li>
+        <li>Pipeline verification agent <span class="status">In progress</span><span>An agent that runs data checks and waits for human approval before anything is merged.</span></li>
+      </ul>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap measure">
+    <h2>Get in touch</h2>
+    <p>I'm looking for data engineering, data architecture and analytics roles in and around Geelong. Email me for a copy of my CV.</p>
+    <ul class="links">
+      <li><a href="mailto:hesam.holegar@gmail.com">hesam.holegar@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/holegar">LinkedIn</a></li>
+      <li><a href="https://github.com/holegar">GitHub</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>
