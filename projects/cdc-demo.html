@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Change data capture coexistence demo, Sam Holegar</title>
+<meta name="description" content="SQL Server change data capture feeding a lakehouse, with a reconciliation report proving both sides match.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the project</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="tick" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 10.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="wrap"><a class="back" href="../">Back to Sam Holegar</a></div>
+
+<header class="project-hero">
+  <div class="wrap">
+    <h1>Change data capture coexistence demo</h1>
+    <p class="thesis">SQL Server change data capture feeding a lakehouse while the source keeps running, with a reconciliation report proving both sides match.</p>
+    <p class="who">In progress. Built from scratch with public data, so anyone can run it. This page fills in as the build does.</p>
+    <ul class="links">
+      <li><a href="https://github.com/holegar/cdc-demo">View the code on GitHub</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+  <section>
+    <div class="wrap">
+      <!-- The same From / To summary used on the homepage -->
+      <div class="move">
+        <div class="flow">
+          <div class="side"><small>From</small><p>SQL Server tables that stay in use throughout</p></div>
+          <div class="arrow" aria-hidden="true"><svg class="h" viewBox="0 0 72 14" preserveAspectRatio="none"><path d="M0 7h64" stroke="currentColor" stroke-width="2"/><path d="M60 2l8 5-8 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg class="v" viewBox="0 0 14 36" preserveAspectRatio="none"><path d="M7 0v28" stroke="currentColor" stroke-width="2"/><path d="M2 24l5 8 5-8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+          <div class="side"><small>To</small><p>A lakehouse that stays in step with them</p></div>
+        </div>
+        <p class="how">SQL Server change data capture picks up every insert, update and delete and feeds it into the lakehouse.</p>
+        <p class="proof"><svg class="check"><use href="#tick"/></svg><span>A reconciliation report proving both sides match.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <div class="wrap measure">
+      <h2>The problem</h2>
+      <p>Moving data off a system people still rely on means running the old and the new side by side for a while. Every change on the source has to reach the target, and at any point you need to be able to show the two still agree.</p>
+
+      <h2>How it works</h2>
+      <p>Change data capture on the SQL Server source records each insert, update and delete as it happens. Those changes flow into the lakehouse, so it keeps up with the source without anyone switching the source off.</p>
+
+      <h2>How I prove it's right</h2>
+      <p>A reconciliation report compares the source and the lakehouse and shows whether they match.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap measure">
+    <h2>Get in touch</h2>
+    <p>I'm looking for data engineering, data architecture and analytics roles in and around Geelong. Email me for a copy of my CV.</p>
+    <ul class="links">
+      <li><a href="mailto:hesam.holegar@gmail.com">hesam.holegar@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/holegar">LinkedIn</a></li>
+      <li><a href="https://github.com/holegar">GitHub</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>
