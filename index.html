@@ -12,139 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --paper: #F2F5F3;
-    --ink: #16343F;
-    --muted: #4E6A70;
-    --line: #C3D2CE;
-    --wheat: #A97A22;
-    --tint: #E4ECE9;
-    --display: "Bricolage Grotesque", "Avenir Next Condensed", "Arial Narrow", system-ui, sans-serif;
-    --text: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-      --paper: #0F2229;
-      --ink: #E4ECE8;
-      --muted: #9DB3B2;
-      --line: #2B4852;
-      --wheat: #D9B45E;
-      --tint: #15303A;
-    }
-  }
-
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--text);
-    font-size: 1.125rem;
-    line-height: 1.6;
-  }
-  a { color: inherit; text-decoration-color: var(--wheat); text-decoration-thickness: 2px; text-underline-offset: 4px; }
-  a:hover { text-decoration-thickness: 3px; }
-  :focus-visible { outline: 3px solid var(--wheat); outline-offset: 3px; border-radius: 2px; }
-
-  .skip { position: absolute; left: -999px; top: 0; background: var(--ink); color: var(--paper); padding: .5rem 1rem; }
-  .skip:focus { left: 1rem; top: 1rem; z-index: 10; }
-
-  .wrap { max-width: 68rem; margin: 0 auto; padding: 0 1.5rem; }
-  .measure { max-width: 40rem; }
-
-  /* Hero */
-  header.hero { padding: 5.5rem 0 4rem; }
-  h1 {
-    font-family: var(--display);
-    font-variation-settings: "wdth" 82, "opsz" 96;
-    font-weight: 750;
-    font-size: clamp(3rem, 9vw, 6.25rem);
-    line-height: .92;
-    letter-spacing: -.025em;
-    margin: 0 0 1.75rem;
-  }
-  .thesis { font-size: clamp(1.25rem, 2.4vw, 1.6rem); line-height: 1.4; margin: 0 0 2.5rem; max-width: 34rem; }
-
-  /* The signature line: where data lives, to where people need it, checked */
-  .journey { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; margin: 0 0 2.75rem; color: var(--muted); font-size: 1rem; }
-  .journey .track { position: relative; height: 2px; background: var(--ink); }
-  .journey .track::before, .journey .track::after { content: ""; position: absolute; top: -5px; width: 12px; height: 12px; border-radius: 50%; }
-  .journey .track::before { left: -2px; background: var(--paper); border: 2px solid var(--ink); }
-  .journey .track::after { right: -2px; background: var(--ink); }
-  .journey .end { display: inline-flex; align-items: center; gap: .5rem; color: var(--ink); font-weight: 700; }
-  .check { width: 1.15em; height: 1.15em; flex: none; color: var(--wheat); }
-
-  .who { margin: 0 0 1.25rem; color: var(--muted); }
-  .links { display: flex; flex-wrap: wrap; gap: .75rem 1.75rem; margin: 0; padding: 0; list-style: none; font-weight: 700; }
-
-  /* Sections */
-  section { padding: 3.5rem 0; border-top: 1px solid var(--line); }
-  h2 {
-    font-family: var(--display);
-    font-variation-settings: "wdth" 90, "opsz" 48;
-    font-weight: 650;
-    font-size: 1.75rem;
-    line-height: 1.15;
-    letter-spacing: -.01em;
-    margin: 0 0 .5rem;
-  }
-  .lede { color: var(--muted); margin: 0 0 2.5rem; }
-  h3 { font-family: var(--display); font-variation-settings: "wdth" 95, "opsz" 24; font-weight: 650; font-size: 1.3rem; margin: 0 0 1rem; line-height: 1.25; }
-
-  /* Work as reconciliations */
-  .moves { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem; }
-  .move .flow { display: grid; grid-template-columns: 1fr 4.5rem 1fr; align-items: stretch; gap: .75rem; }
-  .side { background: var(--tint); padding: .9rem 1rem; border-radius: 6px; }
-  .side small { display: block; color: var(--muted); font-size: .85rem; margin-bottom: .2rem; }
-  .side p { margin: 0; line-height: 1.45; }
-  .arrow { align-self: center; color: var(--ink); }
-  .arrow svg { display: block; width: 100%; height: 14px; }
-  .arrow .v { display: none; }
-  .how { margin: .9rem 0 .4rem; color: var(--muted); font-size: 1rem; }
-  .proof { display: flex; gap: .5rem; align-items: flex-start; margin: 0; font-weight: 700; }
-
-  /* AI */
-  .ai p { margin: 0 0 1.1rem; }
-
-  /* Timeline (a real sequence) */
-  .timeline { list-style: none; margin: 0; padding: 0; }
-  .timeline li { display: grid; grid-template-columns: 9.5rem 1fr; gap: 1rem; padding: .85rem 0; border-bottom: 1px solid var(--line); }
-  .timeline li:last-child { border-bottom: 0; }
-  .timeline .when { color: var(--muted); font-variant-numeric: tabular-nums; }
-  .timeline .role { font-weight: 700; }
-  .timeline .where { display: block; font-weight: 400; color: var(--muted); }
-
-  .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem 3rem; }
-  .plain { margin: 0; padding: 0; list-style: none; }
-  .plain li { margin: 0 0 .7rem; }
-  .plain li span { display: block; color: var(--muted); font-size: 1rem; }
-  .stack dt { font-weight: 700; margin-top: 1rem; }
-  .stack dt:first-child { margin-top: 0; }
-  .stack dd { margin: .15rem 0 0; color: var(--muted); }
-
-  .building li { margin-bottom: 1rem; }
-  .status { display: inline-block; font-size: .85rem; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 .6rem; margin-left: .35rem; }
-
-  footer { border-top: 1px solid var(--line); padding: 3rem 0 4rem; }
-  footer p { margin: 0 0 .75rem; }
-
-  @media (max-width: 720px) {
-    body { font-size: 1.0625rem; }
-    header.hero { padding: 3.5rem 0 3rem; }
-    .journey { grid-template-columns: 1fr; gap: .6rem; }
-    .journey .track { height: 2px; width: 100%; }
-    .move .flow { grid-template-columns: 1fr; }
-    .arrow { justify-self: start; width: 14px; height: 2.25rem; }
-    .arrow svg { width: 14px; height: 100%; transform: none; }
-    .arrow .h { display: none; }
-    .arrow .v { display: block; }
-    .timeline li { grid-template-columns: 1fr; gap: .1rem; }
-    .cols { grid-template-columns: 1fr; }
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <a class="skip" href="#work">Skip to my work</a>
@@ -155,8 +23,13 @@
 
 <header class="hero">
   <div class="wrap">
-    <h1>Sam<br>Holegar</h1>
-    <p class="thesis">I move data from where it lives to where people need it, and prove it's still right when it arrives.</p>
+    <div class="hero-top">
+      <div>
+        <h1>Sam<br>Holegar</h1>
+        <p class="thesis">I move data from where it lives to where people need it, and prove it's still right when it arrives.</p>
+      </div>
+      <img class="portrait" src="images/sam.jpg" alt="Sam Holegar" width="168" height="168" onerror="this.remove()">
+    </div>
 
     <div class="journey" aria-hidden="true">
       <span>Where data lives</span>
@@ -318,7 +191,7 @@
 <footer>
   <div class="wrap measure">
     <h2>Get in touch</h2>
-    <p>I'm looking for data engineering, AI, data architecture and analytics roles in and around Geelong. Email me for a copy of my CV.</p>
+    <p>I'm looking for data engineering, data architecture and analytics roles in and around Geelong. Email me for a copy of my CV.</p>
     <ul class="links">
       <li><a href="mailto:hesam.holegar@gmail.com">hesam.holegar@gmail.com</a></li>
       <li><a href="https://www.linkedin.com/in/holegar">LinkedIn</a></li>

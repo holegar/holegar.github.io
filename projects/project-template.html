@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- HOW TO USE: copy this file, rename it (for example cdc-demo.html), then replace every [bracketed] placeholder. Delete any section you don't need. -->
+<title>[Project name], Sam Holegar</title>
+<meta name="description" content="[One sentence on what this project does.]">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the project</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="tick" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 10.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="wrap"><a class="back" href="../">Back to Sam Holegar</a></div>
+
+<header class="project-hero">
+  <div class="wrap">
+    <h1>[Project name]</h1>
+    <p class="thesis">[One sentence on what this project does and why it matters.]</p>
+    <ul class="links">
+      <li><a href="https://github.com/holegar/[repo-name]">View the code on GitHub</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+  <section>
+    <div class="wrap">
+      <!-- The same From / To summary used on the homepage -->
+      <div class="move">
+        <div class="flow">
+          <div class="side"><small>From</small><p>[Where the data starts]</p></div>
+          <div class="arrow" aria-hidden="true"><svg class="h" viewBox="0 0 72 14" preserveAspectRatio="none"><path d="M0 7h64" stroke="currentColor" stroke-width="2"/><path d="M60 2l8 5-8 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg class="v" viewBox="0 0 14 36" preserveAspectRatio="none"><path d="M7 0v28" stroke="currentColor" stroke-width="2"/><path d="M2 24l5 8 5-8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+          <div class="side"><small>To</small><p>[Where it ends up]</p></div>
+        </div>
+        <p class="how">[How it moves, in one sentence. Tools and method.]</p>
+        <p class="proof"><svg class="check"><use href="#tick"/></svg><span>[How you prove it arrived correctly.]</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <div class="wrap measure">
+      <h2>The problem</h2>
+      <p>[Two or three sentences. What real-world situation does this copy? Why is it hard?]</p>
+
+      <h2>How it works</h2>
+      <figure>
+        <img src="../images/projects/[project]-diagram.png" alt="[Describe what the diagram shows]">
+        <figcaption>[One line explaining the diagram.]</figcaption>
+      </figure>
+      <p>[Walk through the flow in plain language, step by step.]</p>
+
+      <h2>How I prove it's right</h2>
+      <ul>
+        <li>[Check one, for example row counts match between source and target]</li>
+        <li>[Check two, for example totals reconcile to the cent]</li>
+        <li>[Check three, for example a deliberate bad record is caught and reported]</li>
+      </ul>
+
+      <h2>What it shows</h2>
+      <figure>
+        <img src="../images/projects/[project]-result.png" alt="[Describe the screenshot]">
+        <figcaption>[What the reader is looking at.]</figcaption>
+      </figure>
+      <p>[The result, and what it would mean in a real organisation.]</p>
+
+      <h2>Run it yourself</h2>
+      <pre><code>git clone https://github.com/holegar/[repo-name]
+cd [repo-name]
+[setup and run commands]</code></pre>
+
+      <h2>Built with</h2>
+      <p>[The tools, for example SQL Server CDC, Python and Microsoft Fabric]</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap measure">
+    <h2>Get in touch</h2>
+    <p>I'm looking for data engineering, data architecture and analytics roles in and around Geelong. Email me for a copy of my CV.</p>
+    <ul class="links">
+      <li><a href="mailto:hesam.holegar@gmail.com">hesam.holegar@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/holegar">LinkedIn</a></li>
+      <li><a href="https://github.com/holegar">GitHub</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>
