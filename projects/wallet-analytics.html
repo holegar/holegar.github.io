@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal finance analytics dashboard, Sam Holegar</title>
+<meta name="description" content="Every transaction across bank accounts, cards and currencies in one dashboard, explored by any dimension and period, with a forecast scored against what actually happened.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the project</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="tick" viewBox="0 0 20 20"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5.5 10.4l3 3 6-6.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<div class="wrap"><a class="back" href="../">Back to Sam Holegar</a></div>
+
+<header class="project-hero">
+  <div class="wrap">
+    <h1>Personal finance analytics dashboard</h1>
+    <p class="thesis">Every transaction from my bank accounts and cards, across two countries and several currencies, in one dashboard that answers questions by any dimension and any period.</p>
+    <p class="who">Built for my own household. The public demo runs on invented data, so anyone can explore it without seeing a real transaction.</p>
+    <ul class="links">
+      <li><a href="https://holegar.github.io/wallet-analytics/">Open the live demo</a></li>
+      <li><a href="https://github.com/holegar/wallet-analytics">View the code on GitHub</a></li>
+    </ul>
+  </div>
+</header>
+
+<main id="main">
+  <section>
+    <div class="wrap">
+      <!-- The same From / To summary used on the homepage -->
+      <div class="move">
+        <div class="flow">
+          <div class="side"><small>From</small><p>Thousands of transactions across bank accounts, cards and currencies in BudgetBakers Wallet</p></div>
+          <div class="arrow" aria-hidden="true"><svg class="h" viewBox="0 0 72 14" preserveAspectRatio="none"><path d="M0 7h64" stroke="currentColor" stroke-width="2"/><path d="M60 2l8 5-8 5" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg class="v" viewBox="0 0 14 36" preserveAspectRatio="none"><path d="M7 0v28" stroke="currentColor" stroke-width="2"/><path d="M2 24l5 8 5-8" fill="none" stroke="currentColor" stroke-width="2"/></svg></div>
+          <div class="side"><small>To</small><p>One self-contained dashboard that filters, compares and forecasts them</p></div>
+        </div>
+        <p class="how">Python pulls every record from the Wallet API, converts each one at the exchange rate on its own date, and embeds them all in a single static page.</p>
+        <p class="proof"><svg class="check"><use href="#tick"/></svg><span>Every chart has the table behind it, and the forecast is scored against what actually happened.</span></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="prose">
+    <div class="wrap measure">
+      <h2>The problem</h2>
+      <p>Banking apps show one account at a time, in one currency, mostly for this month. I wanted to see how our spending changed when we moved from the UK to Australia, which life events shifted it, and whether a trend was real or just noise. That needs every account in one place, in one currency, sliced any way I like.</p>
+
+      <h2>How it works</h2>
+      <figure>
+        <img src="../images/projects/wallet-analytics-overview.jpg" alt="The dashboard's Overview tab: a date slider with presets and life-period chips, filters for region, metric, currency and every dimension, and KPI cards for spending, income, net saved and savings rate" width="799" height="506" loading="lazy">
+        <figcaption>Every filter applies to every tab. The chips under the date slider jump straight to a life period.</figcaption>
+      </figure>
+      <p>A Python script pulls the accounts, categories and every record from the BudgetBakers Wallet REST API. It converts each record to Australian dollars and pounds twice: at the European Central Bank rate on the transaction's own date, and at today's rate, so currency swings can be switched off. The result is embedded as compact columnar JSON in one HTML file, with no server and no build step.</p>
+      <p>In the page, dates, region, life periods, category, label, account, payee, currency and more all filter every report. Tabs cover trends, breakdowns, comparisons between any two periods, a pivot table and a forecast. A Refresh button rebuilds it from live data through a small helper on my own computer, so the bank data never leaves it.</p>
+
+      <h2>How I prove it's right</h2>
+      <ul>
+        <li>Before building any of it, I reconciled the ledger against bank statements, so the dashboard starts from figures that match the banks.</li>
+        <li>Every chart has a table view and a CSV export, so any figure can be traced back to the records behind it.</li>
+        <li>The forecast is scored against the months that followed its fit window, with MAPE, MAE, RMSE, 95% interval coverage and a seasonal-naive benchmark to beat.</li>
+        <li>Before every release of the demo, a script checks each published file against the real ledger's account, payee and label names, so nothing private can slip out.</li>
+      </ul>
+
+      <h2>What it shows</h2>
+      <figure>
+        <img src="../images/projects/wallet-analytics-forecast.jpg" alt="Monthly spending bars from July 2022 to March 2026 with a fitted linear trend, then six orange months of actual spending against a dashed projection, a grey 95% prediction band and a dotted seasonal-naive line" width="775" height="290" loading="lazy">
+        <figcaption>A trend fitted on July 2022 to March 2026 of the demo data, against the six months that followed.</figcaption>
+      </figure>
+      <p>In the demo, a fictional household moves from the UK to Australia. Comparing its life periods per month shows the move clearly: spending jumps in the first months with the rental bond, furniture and a car, while income dips during two months of job hunting, then recovers in the next role.</p>
+
+      <h2>Run it yourself</h2>
+      <pre><code>git clone https://github.com/holegar/wallet-analytics
+cd wallet-analytics
+python make_demo.py</code></pre>
+      <p>Then open <code>index.html</code> in a browser. It needs Python 3.10 or later and nothing else.</p>
+
+      <h2>Built with</h2>
+      <p>JavaScript and Apache ECharts, Python with only the standard library, the BudgetBakers Wallet REST API, European Central Bank exchange rates, and GitHub Pages.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap measure">
+    <h2>Get in touch</h2>
+    <p>I'm open to data engineering, AI, data architecture and analytics roles and projects in and around Victoria. Email me for a copy of my CV.</p>
+    <ul class="links">
+      <li><a href="mailto:hesam.holegar@gmail.com">hesam.holegar@gmail.com</a></li>
+      <li><a href="https://www.linkedin.com/in/holegar">LinkedIn</a></li>
+      <li><a href="https://github.com/holegar">GitHub</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>
