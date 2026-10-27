@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Private stats page. Not linked from the site, and shows nothing without a GoatCounter API key saved in this browser. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Site stats, Sam Holegar</title>
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to the stats</a>
+
+<div class="wrap"><a class="back" href="../">Back to Sam Holegar</a></div>
+
+<header class="project-hero">
+  <div class="wrap">
+    <h1>Site stats</h1>
+    <p class="who">Visitor numbers from GoatCounter. This page isn't linked from the site and shows nothing without your key.</p>
+    <noscript><p class="msg error">This page needs JavaScript.</p></noscript>
+  </div>
+</header>
+
+<main id="main">
+  <section id="setup" hidden>
+    <div class="wrap measure">
+      <h2>Connect GoatCounter</h2>
+      <ol class="steps">
+        <li>In GoatCounter, open the menu under your username and choose API.</li>
+        <li>Create a key with only the permission to read statistics.</li>
+        <li>Paste it below. It's saved in this browser only and sent only to GoatCounter.</li>
+      </ol>
+      <form id="key-form" autocomplete="off">
+        <label for="key">API key</label>
+        <div class="field">
+          <input id="key" type="password" spellcheck="false" required>
+          <button class="btn btn-primary" type="submit">Save key</button>
+        </div>
+      </form>
+      <p class="msg" id="setup-msg" role="status"></p>
+    </div>
+  </section>
+
+  <section id="dash" hidden>
+    <div class="wrap">
+      <fieldset class="range">
+        <legend class="visually-hidden">Date range</legend>
+        <label><input type="radio" name="range" value="7" checked><span>Last 7 days</span></label>
+        <label><input type="radio" name="range" value="30"><span>Last 30 days</span></label>
+        <label><input type="radio" name="range" value="90"><span>Last 90 days</span></label>
+      </fieldset>
+      <p class="msg" id="status" role="status"></p>
+
+      <div class="results" id="results" hidden>
+        <p class="hero-stat">
+          <span id="total-label">Visitors</span>
+          <span class="value" id="total"></span>
+          <span id="total-span"></span>
+        </p>
+
+        <div class="daily">
+          <h2>Visitors per day</h2>
+          <div class="chart" id="chart" tabindex="0" role="group" aria-label="Visitors per day. Use the left and right arrow keys to read each day.">
+            <svg aria-hidden="true"></svg>
+            <div class="tip" id="tip" hidden><strong id="tip-n"></strong><span id="tip-day"></span></div>
+          </div>
+          <p class="visually-hidden" id="chart-live" aria-live="polite"></p>
+          <details class="table-view">
+            <summary>Show as a table</summary>
+            <table class="data">
+              <thead><tr><th scope="col">Day</th><th scope="col" class="n">Visitors</th></tr></thead>
+              <tbody id="daily"></tbody>
+            </table>
+          </details>
+        </div>
+
+        <div class="lists">
+          <div>
+            <h2>Top pages</h2>
+            <table class="data toplist">
+              <thead class="visually-hidden"><tr><th scope="col">Page</th><th scope="col">Visitors</th></tr></thead>
+              <tbody id="pages"></tbody>
+            </table>
+          </div>
+          <div>
+            <h2>Where visitors came from</h2>
+            <table class="data toplist">
+              <thead class="visually-hidden"><tr><th scope="col">Source</th><th scope="col">Visitors</th></tr></thead>
+              <tbody id="refs"></tbody>
+            </table>
+          </div>
+          <div>
+            <h2>Countries</h2>
+            <table class="data toplist">
+              <thead class="visually-hidden"><tr><th scope="col">Country</th><th scope="col">Visitors</th></tr></thead>
+              <tbody id="locs"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap measure">
+      <h2>This browser</h2>
+      <label class="toggle"><input type="checkbox" id="skip"><span>Don't count my own visits from this browser</span></label>
+      <p class="msg" id="skip-msg" role="status"></p>
+      <p><button class="btn" type="button" id="forget" hidden>Remove the key from this browser</button></p>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  const SITE = 'https://holegar.goatcounter.com';
+  const KEY_STORE = 'goatcounter-stats-key';
+
+  const $ = (id) => document.getElementById(id);
+  const nf = new Intl.NumberFormat('en-AU');
+  const compact = new Intl.NumberFormat('en-AU', { notation: 'compact', maximumFractionDigits: 1 });
+  const shortDay = new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+  const longDay = new Intl.DateTimeFormat('en-AU', { weekday: 'short', day: 'numeric', month: 'long', timeZone: 'UTC' });
+  const parseDay = (day) => new Date(day + 'T00:00:00Z');
+  const big = (n) => (n >= 10000 ? compact.format(n) : nf.format(n));
+  const visitors = (n) => nf.format(n) + (n === 1 ? ' visitor' : ' visitors');
+
+  // localStorage can be missing or throw (private windows, blocked storage).
+  const store = {
+    get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } },
+    remove(k) { try { localStorage.removeItem(k); } catch (e) { /* nothing to remove */ } },
+  };
+
+  let key = store.get(KEY_STORE);
+  let days = 7;
+  let daily = [];
+  let active = -1;
+  let ticket = 0;
+
+  function setMsg(id, text, isError) {
+    const p = $(id);
+    p.textContent = text || '';
+    p.classList.toggle('error', !!isError);
+  }
+
+  function show(view) {
+    $('setup').hidden = view !== 'setup';
+    $('dash').hidden = view !== 'dash';
+    $('forget').hidden = view !== 'dash';
+  }
+
+  // ---- GoatCounter API ----
+  // start/end should be rounded to the hour.
+  const iso = (d) => d.toISOString().replace(/\.\d{3}Z$/, 'Z');
+  function range(n) {
+    const end = new Date();
+    end.setUTCMinutes(0, 0, 0);
+    end.setUTCHours(end.getUTCHours() + 1);
+    const start = new Date();
+    start.setHours(0, 0, 0, 0);
+    start.setDate(start.getDate() - (n - 1));
+    start.setUTCMinutes(0, 0, 0);
+    return { start: iso(start), end: iso(end) };
+  }
+
+  async function api(path, params, token) {
+    const url = new URL(SITE + '/api/v0/' + path);
+    for (const [name, value] of Object.entries(params)) url.searchParams.set(name, value);
+    let res;
+    try {
+      res = await fetch(url, { headers: { Authorization: 'Bearer ' + (token || key) }, cache: 'no-store' });
+    } catch (e) {
+      throw Object.assign(new Error('network'), { status: 0 });
+    }
+    if (!res.ok) throw Object.assign(new Error('HTTP ' + res.status), { status: res.status });
+    return res.json();
+  }
+
+  function explain(err) {
+    switch (err.status) {
+      case 401: return "GoatCounter didn't accept this key. Check you copied all of it, or create a new one.";
+      case 403: return "This key isn't allowed to read statistics. Create one with the statistics permission.";
+      case 429: return 'GoatCounter asked to slow down. Wait a few seconds and try again.';
+      case 0: return "Couldn't reach GoatCounter. Check your connection and try again.";
+      default: return 'GoatCounter returned an error (' + err.status + '). Try again later.';
+    }
+  }
+
+  // ---- Loading ----
+  async function load() {
+    const mine = ++ticket;
+    const results = $('results');
+    results.classList.add('loading');
+    setMsg('status', '');
+    const params = range(days);
+    try {
+      // One at a time: the API allows 4 requests a second.
+      const total = await api('stats/total', params);
+      const hits = await api('stats/hits', Object.assign({ limit: 10 }, params));
+      const refs = await api('stats/toprefs', Object.assign({ limit: 10 }, params));
+      const locs = await api('stats/locations', Object.assign({ limit: 10 }, params));
+      if (mine !== ticket) return;
+      results.hidden = false; // visible first, so the chart measures its real width
+      renderTotal(total);
+      renderList('pages', (hits.hits || []).map((h) => ({ name: h.title || h.path, sub: h.title ? h.path : '', n: h.count })), 'No visits in this period.');
+      renderList('refs', (refs.stats || []).map((r) => ({ name: r.name || 'Direct or unknown', n: r.count })), 'No visits in this period.');
+      renderList('locs', (locs.stats || []).map((r) => ({ name: r.name || 'Unknown', n: r.count })), 'No visits in this period.');
+    } catch (err) {
+      if (mine === ticket) setMsg('status', explain(err), true);
+    } finally {
+      if (mine === ticket) results.classList.remove('loading');
+    }
+  }
+
+  function renderTotal(data) {
+    daily = (data.stats || []).map((s) => ({ day: s.day, n: s.daily || 0 }));
+    $('total-label').textContent = 'Visitors in the last ' + days + ' days';
+    $('total').textContent = big(data.total || 0);
+    $('total-span').textContent = daily.length
+      ? shortDay.format(parseDay(daily[0].day)) + ' to ' + shortDay.format(parseDay(daily[daily.length - 1].day))
+      : '';
+    drawChart();
+    const body = $('daily');
+    body.replaceChildren();
+    for (const d of daily) {
+      const tr = body.insertRow();
+      tr.insertCell().textContent = longDay.format(parseDay(d.day));
+      const n = tr.insertCell();
+      n.className = 'n';
+      n.textContent = nf.format(d.n);
+    }
+  }
+
+  function renderList(id, rows, emptyText) {
+    const body = $(id);
+    body.replaceChildren();
+    if (!rows.length) {
+      const td = body.insertRow().insertCell();
+      td.colSpan = 2;
+      td.className = 'empty';
+      td.textContent = emptyText;
+      return;
+    }
+    const max = Math.max(1, ...rows.map((r) => r.n));
+    for (const r of rows) {
+      const tr = body.insertRow();
+      const name = tr.insertCell();
+      name.className = 'name';
+      name.append(r.name);
+      if (r.sub) {
+        const sub = document.createElement('span');
+        sub.className = 'path';
+        sub.textContent = r.sub;
+        name.append(sub);
+      }
+      const meter = document.createElement('span');
+      meter.className = 'meter';
+      meter.style.width = (r.n / max) * 100 + '%';
+      meter.setAttribute('aria-hidden', 'true');
+      name.append(meter);
+      const n = tr.insertCell();
+      n.className = 'n';
+      n.textContent = nf.format(r.n);
+    }
+  }
+
+  // ---- Daily chart ----
+  const SVG = 'http://www.w3.org/2000/svg';
+  const geo = {};
+
+  function node(name, attrs, parent) {
+    const el = document.createElementNS(SVG, name);
+    for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v);
+    parent.appendChild(el);
+    return el;
+  }
+
+  // Round the axis step to 1, 2 or 5 x 10^k, and never below 1: visitors are whole numbers.
+  function niceStep(max) {
+    const raw = max / 4;
+    const pow = 10 ** Math.floor(Math.log10(raw));
+    const f = raw / pow;
+    return Math.max(1, (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * pow);
+  }
+
+  function drawChart() {
+    const box = $('chart');
+    const svg = box.querySelector('svg');
+    svg.replaceChildren();
+    clearActive();
+    const W = Math.max(240, box.clientWidth);
+    const H = 210;
+    const left = 36, right = 4, top = 22, axis = 26;
+    const plotW = W - left - right;
+    const plotH = H - top - axis;
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+    svg.setAttribute('width', W);
+    svg.setAttribute('height', H);
+    Object.assign(geo, { W, left, plotW, top, plotH, n: daily.length });
+
+    const max = Math.max(0, ...daily.map((d) => d.n));
+    const step = niceStep(Math.max(max, 1));
+    const ceil = Math.max(step, Math.ceil(max / step) * step);
+    const y = (v) => top + plotH - (v / ceil) * plotH;
+    geo.y = y;
+
+    for (let v = 0; v <= ceil; v += step) {
+      node('line', { class: 'grid', x1: left, x2: W - right, y1: y(v), y2: y(v) }, svg);
+      node('text', { class: 'axis', x: left - 8, y: y(v), 'text-anchor': 'end', 'dominant-baseline': 'middle' }, svg)
+        .textContent = v >= 1000 ? compact.format(v) : String(v);
+    }
+
+    const n = daily.length;
+    if (!n) return;
+    const band = plotW / n;
+    const bw = Math.max(1, Math.min(24, band - 2)); // 2px gap between neighbouring bars
+    geo.band = band;
+    const base = top + plotH;
+
+    daily.forEach((d, i) => {
+      const h = (d.n / ceil) * plotH;
+      if (h <= 0) return;
+      const x0 = left + i * band + (band - bw) / 2;
+      const x1 = x0 + bw;
+      const yt = base - h;
+      const r = Math.min(4, bw / 2, h);
+      // Rounded at the data end, square at the baseline.
+      node('path', {
+        class: 'bar',
+        'data-i': i,
+        d: 'M' + x0 + ',' + base + 'V' + (yt + r) + 'A' + r + ',' + r + ' 0 0 1 ' + (x0 + r) + ',' + yt +
+           'H' + (x1 - r) + 'A' + r + ',' + r + ' 0 0 1 ' + x1 + ',' + (yt + r) + 'V' + base + 'Z',
+      }, svg);
+    });
+
+    // Label only the busiest day; the axis, tooltip and table carry the rest.
+    if (max > 0) {
+      const i = daily.findIndex((d) => d.n === max);
+      node('text', { class: 'peak', x: left + (i + 0.5) * band, y: y(max) - 7, 'text-anchor': 'middle' }, svg).textContent = nf.format(max);
+    } else {
+      node('text', { class: 'empty-note', x: left + plotW / 2, y: top + plotH / 2, 'text-anchor': 'middle' }, svg).textContent = 'No visits in this period yet.';
+    }
+
+    // Date labels, spaced so they never collide; the last day always gets one.
+    const every = Math.max(1, Math.ceil(64 / band));
+    for (let i = n - 1; i >= 0; i -= every) {
+      let x = left + (i + 0.5) * band;
+      let anchor = 'middle';
+      if (x + 24 > W) { x = W - right; anchor = 'end'; }
+      if (x - 24 < 0) { x = left; anchor = 'start'; }
+      node('text', { class: 'axis', x, y: H - 6, 'text-anchor': anchor }, svg).textContent = shortDay.format(parseDay(daily[i].day));
+    }
+  }
+
+  function setActive(i) {
+    if (i === active || i < 0 || i >= daily.length) return;
+    clearActive();
+    active = i;
+    const bar = $('chart').querySelector('.bar[data-i="' + i + '"]');
+    if (bar) bar.classList.add('active');
+    const d = daily[i];
+    const width = $('chart').querySelector('svg').getBoundingClientRect().width;
+    const scale = width / geo.W || 1;
+    const tip = $('tip');
+    $('tip-n').textContent = visitors(d.n);
+    $('tip-day').textContent = longDay.format(parseDay(d.day));
+    tip.hidden = false;
+    const half = tip.offsetWidth / 2;
+    const x = (geo.left + (i + 0.5) * geo.band) * scale;
+    tip.style.left = Math.min(Math.max(x, half), width - half) + 'px';
+    tip.style.top = geo.y(d.n) * scale + 'px';
+  }
+
+  function clearActive() {
+    const prev = $('chart').querySelector('.bar.active');
+    if (prev) prev.classList.remove('active');
+    active = -1;
+    $('tip').hidden = true;
+  }
+
+  const chart = $('chart');
+  chart.addEventListener('pointermove', (e) => {
+    if (!daily.length) return;
+    const rect = chart.querySelector('svg').getBoundingClientRect();
+    const x = ((e.clientX - rect.left) * geo.W) / rect.width;
+    setActive(Math.min(daily.length - 1, Math.max(0, Math.floor((x - geo.left) / geo.band))));
+  });
+  chart.addEventListener('pointerleave', clearActive);
+  chart.addEventListener('blur', clearActive);
+  chart.addEventListener('keydown', (e) => {
+    if (!daily.length) return;
+    const last = daily.length - 1;
+    let next = null;
+    if (e.key === 'ArrowRight') next = active < 0 ? 0 : Math.min(last, active + 1);
+    else if (e.key === 'ArrowLeft') next = active < 0 ? last : Math.max(0, active - 1);
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = last;
+    else if (e.key === 'Escape') { clearActive(); return; }
+    if (next === null) return;
+    e.preventDefault();
+    setActive(next);
+    $('chart-live').textContent = longDay.format(parseDay(daily[next].day)) + ': ' + visitors(daily[next].n);
+  });
+
+  let lastWidth = 0;
+  new ResizeObserver(() => {
+    if (!daily.length || chart.clientWidth === lastWidth) return;
+    lastWidth = chart.clientWidth;
+    drawChart();
+  }).observe(chart);
+
+  // ---- Controls ----
+  for (const radio of document.querySelectorAll('input[name="range"]')) {
+    radio.addEventListener('change', () => { days = Number(radio.value); load(); });
+  }
+
+  $('key-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const candidate = $('key').value.trim();
+    if (!candidate) return;
+    setMsg('setup-msg', 'Checking the key…');
+    try {
+      await api('stats/total', range(1), candidate);
+    } catch (err) {
+      setMsg('setup-msg', explain(err), true);
+      return;
+    }
+    key = candidate;
+    $('key').value = '';
+    setMsg('setup-msg', '');
+    show('dash');
+    if (!store.set(KEY_STORE, key)) setMsg('status', "This browser wouldn't save the key, so you'll need to paste it again next time.");
+    load();
+  });
+
+  $('forget').addEventListener('click', () => {
+    store.remove(KEY_STORE);
+    key = null;
+    ticket++;
+    daily = [];
+    $('results').hidden = true;
+    setMsg('status', '');
+    show('setup');
+    setMsg('setup-msg', 'Key removed from this browser.');
+  });
+
+  // count.js skips counting when localStorage "skipgc" is "t".
+  const skip = $('skip');
+  skip.checked = store.get('skipgc') === 't';
+  skip.addEventListener('change', () => {
+    let ok = true;
+    if (skip.checked) ok = store.set('skipgc', 't');
+    else store.remove('skipgc');
+    if (!ok) { skip.checked = false; setMsg('skip-msg', "This browser won't save settings, so your visits will still be counted.", true); return; }
+    setMsg('skip-msg', skip.checked ? "Your visits from this browser won't be counted." : 'Your visits from this browser will be counted.');
+  });
+
+  if (key) { show('dash'); load(); } else { show('setup'); }
+})();
+</script>
+</body>
+</html>

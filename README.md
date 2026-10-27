@@ -11,6 +11,7 @@ My portfolio site, published with GitHub Pages. Every commit to `main` updates t
 | `images/` | Photos and images |
 | `images/projects/` | Diagrams and screenshots for project pages |
 | `projects/project-template.html` | A blank project page to copy |
+| `stats/` | A private visitor stats page. Not linked from the site |
 
 ## Add your photo
 
@@ -29,6 +30,15 @@ Until the file exists, the photo space stays hidden, so nothing looks broken.
 5. Commit to `main`.
 
 The template itself isn't linked from the homepage, so it won't show up for visitors.
+
+## Visitor stats
+
+Visits are counted by [GoatCounter](https://www.goatcounter.com/), which uses no cookies. Every page has one script line just before `</body>`. Pages copied from the template already have it.
+
+To see the numbers, open [holegar.github.io/stats/](https://holegar.github.io/stats/) or the GoatCounter dashboard at holegar.goatcounter.com.
+
+- The stats page asks for a GoatCounter API key the first time. Create one that can only read statistics. It's saved in that browser only, so never put it in this repo: everything here is public.
+- Tick "Don't count my own visits" on the stats page in each browser you use, so your own visits stay out of the numbers.
 
 ## If something doesn't appear
 
